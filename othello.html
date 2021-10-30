@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <style>
+    .item {
+      vertical-align: bottom;
+      border: 1px solid white;
+      width: 50px;
+      height: 50px;
+      background-color: green;
+      display: inline-block
+    }
+
+    .item::before {
+      content: " ";
+      display: inline-block;
+      margin: 5px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+    }
+    .blackDisc::before {
+      background-color: black;
+    }
+    .whiteDisc::before {
+      background-color: white;
+    }
+  </style>
+  <body>
+    <div id="container"></div>
+    <script src="othello.js"></script>
+
+    <script>
+      const container = document.getElementById('container');
+
+      class OthelloView {
+        constructor(game, container) {
+          this.game = game;
+          this.container = container;
+          this.show(game.pattern)
+        }
+
+        show(pattern) {
+          this.container.innerHTML = "";
+          for (let y = 0; y < 8; y++) {
+            for (let x = 0; x < 8; x++) {
+              let el = document.createElement('div');
+              const pos = this.game.pattern.board[y][x];
+              el.className = `item ${pos === 1 ? 'blackDisc' : ''} ${pos === 2 ? 'whiteDisc' : ''}`;
+              
+              el.addEventListener('click', () => {
+                this.game.move(x, y);
+                this.show(pattern);
+              });
+
+              this.container.appendChild(el);
+            }
+
+            this.container.appendChild(document.createElement('br'));
+          }
+        }
+      }
+
+      var g = new OthelloView(new OthelloGame(), container);
+    </script>
+  </body>
+</html>
